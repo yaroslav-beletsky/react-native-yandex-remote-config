@@ -1,35 +1,19 @@
-import { NativeModules, Platform } from 'react-native';
 import type { Settings, ValueType } from './types';
 import { FlagType } from './types';
-
-const LINKING_ERROR =
-  `The package '@beletsky/react-native-yandex-remote-config' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
-
-const BRNYandexRemoteConfig = NativeModules.BRNYandexRemoteConfig
-  ? NativeModules.BRNYandexRemoteConfig
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+import NativeYandexRemoteConfig from './specs/NativeYandexRemoteConfig';
 
 class YandexRemoteConfigClass {
-  private native = BRNYandexRemoteConfig;
-
-  public getDeviceId = (): Promise<string> => this.native.getDeviceId();
+  public getDeviceId = (): Promise<string> =>
+    NativeYandexRemoteConfig.getDeviceId();
 
   public init = (apiKey: string, config?: Settings): Promise<string> =>
-    this.native.initialize(apiKey, config);
+    NativeYandexRemoteConfig.initialize(apiKey, config || {});
 
-  public activateConfig = (): Promise<string> => this.native.activateConfig();
+  public activateConfig = (): Promise<string> =>
+    NativeYandexRemoteConfig.activateConfig();
 
-  public fetchConfig = (): Promise<string> => this.native.fetchConfig();
+  public fetchConfig = (): Promise<string> =>
+    NativeYandexRemoteConfig.fetchConfig();
 
   public get = async <S extends FlagType, T extends ValueType<S>>(
     key: string,
@@ -39,19 +23,28 @@ class YandexRemoteConfigClass {
     try {
       switch (type) {
         case FlagType.string: {
-          return await BRNYandexRemoteConfig.getString(key, defaultValue ?? '');
+          return (await NativeYandexRemoteConfig.getString(
+            key,
+            `${defaultValue ?? ''}`
+          )) as T;
         }
         case FlagType.int: {
-          return await BRNYandexRemoteConfig.getInt(key, defaultValue ?? 0);
+          return (await NativeYandexRemoteConfig.getInt(
+            key,
+            Number(defaultValue ?? 0)
+          )) as T;
         }
         case FlagType.double: {
-          return await BRNYandexRemoteConfig.getDouble(key, defaultValue ?? 0);
+          return (await NativeYandexRemoteConfig.getDouble(
+            key,
+            Number(defaultValue ?? 0)
+          )) as T;
         }
         case FlagType.bool: {
-          return await BRNYandexRemoteConfig.getBool(
+          return (await NativeYandexRemoteConfig.getBool(
             key,
-            defaultValue ?? false
-          );
+            Boolean(defaultValue ?? false)
+          )) as T;
         }
       }
     } catch (e) {

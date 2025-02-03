@@ -1,35 +1,17 @@
-package com.yandexremoteconfig
+package com.beletsky.yandexremoteconfig;
 
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.*
+import com.facebook.react.module.annotations.ReactModule
+
 import com.yandex.varioqub.appmetricaadapter.AppmetricaAdapter
 import com.yandex.varioqub.config.FetchError
 import com.yandex.varioqub.config.OnFetchCompleteListener
 import com.yandex.varioqub.config.Varioqub
 import com.yandex.varioqub.config.VarioqubSettings
 
-class YandexRemoteConfigModule(reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext) {
+@ReactModule(name = NativeYandexRemoteConfigSpec.NAME)
+class YandexRemoteConfigModule(reactContext: ReactApplicationContext) : NativeYandexRemoteConfigSpec(reactContext) {
 
-  override fun getName(): String {
-    return NAME
-  }
-
-  // Example method
-  // See https://reactnative.dev/docs/native-modules-android
-  @ReactMethod
-  fun multiply(a: Double, b: Double, promise: Promise) {
-    promise.resolve(a * b)
-  }
-
-  companion object {
-    const val NAME = "BRNYandexRemoteConfig"
-  }
-
-  @ReactMethod
   fun createVarioqubConfigFromJSObject(appId: String, jsObject: ReadableMap?): VarioqubSettings {
 
     val vqCfg = VarioqubSettings.Builder(appId)
@@ -71,7 +53,7 @@ class YandexRemoteConfigModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun initialize(apiKey: String, config: ReadableMap?, promise: Promise) {
+  override fun initialize(apiKey: String, config: ReadableMap?, promise: Promise) {
     try {
       val settings = createVarioqubConfigFromJSObject(apiKey, config)
 
@@ -88,14 +70,14 @@ class YandexRemoteConfigModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun activateConfig(promise: Promise) {
+  override fun activateConfig(promise: Promise) {
     Varioqub.activateConfig {
       promise.resolve("activateConfig completed")
     }
   }
 
   @ReactMethod
-  fun fetchConfig(promise: Promise) {
+  override fun fetchConfig(promise: Promise) {
     Varioqub.fetchConfig(object : OnFetchCompleteListener {
       override fun onSuccess() {
         promise.resolve("success")
@@ -108,7 +90,7 @@ class YandexRemoteConfigModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun getString(flagName: String, defaultValue: String, promise: Promise) {
+  override fun getString(flagName: String, defaultValue: String, promise: Promise) {
     if (flagName != null) {
       val value = Varioqub.getString(flagName, defaultValue)
       promise.resolve(value)
@@ -118,7 +100,7 @@ class YandexRemoteConfigModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun getInt(flagName: String, defaultValue: Double, promise: Promise) {
+  override fun getInt(flagName: String, defaultValue: Double, promise: Promise) {
     if (flagName != null) {
       val value = Varioqub.getLong(flagName, defaultValue.toLong())
       promise.resolve(value.toInt())
@@ -128,7 +110,7 @@ class YandexRemoteConfigModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun getDouble(flagName: String, defaultValue: Double, promise: Promise) {
+  override fun getDouble(flagName: String, defaultValue: Double, promise: Promise) {
     if (flagName != null) {
       val value = Varioqub.getDouble(flagName, defaultValue)
       promise.resolve(value)
@@ -138,7 +120,7 @@ class YandexRemoteConfigModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun getBool(flagName: String, defaultValue: Boolean, promise: Promise) {
+  override fun getBool(flagName: String, defaultValue: Boolean, promise: Promise) {
     if (flagName != null) {
       val value = Varioqub.getBoolean(flagName, defaultValue)
       promise.resolve(value)
@@ -148,13 +130,17 @@ class YandexRemoteConfigModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun getDeviceId(promise: Promise) {
+  override fun getDeviceId(promise: Promise) {
     val deviceId = Varioqub.getId()
     if (deviceId != null) {
       promise.resolve(deviceId)
     } else {
       promise.reject("NO_VALUE", "No value for deviceId")
     }
+  }
+
+  companion object {
+    const val NAME: String = NativeYandexRemoteConfigSpec.NAME
   }
 
 }

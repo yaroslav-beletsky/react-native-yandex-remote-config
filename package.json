@@ -1,6 +1,6 @@
 {
   "name": "@beletsky/react-native-yandex-remote-config",
-  "version": "0.2.3",
+  "version": "1.0.0",
   "description": "Yandex Remote Config for React Native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -192,5 +192,18 @@
     "type": "module-legacy",
     "languages": "kotlin-swift",
     "version": "0.41.0"
+  },
+  "codegenConfig": {
+    "name": "RNYandexRemoteConfigSpecs",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "outputDir": {
+      "ios": "ios/generated",
+      "android": "android/generated"
+    },
+    "android": {
+      "javaPackageName": "com.beletsky.yandexremoteconfig"
+    },
+    "includesGeneratedCode": true
   }
 }

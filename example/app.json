@@ -1,38 +1,4 @@
 {
-  "name": "YandexRemoteConfigExample",
-  "displayName": "YandexRemoteConfigExample",
-  "components": [
-    {
-      "appKey": "YandexRemoteConfigExample",
-      "displayName": "YandexRemoteConfigExample"
-    }
-  ],
-  "resources": {
-    "android": [
-      "dist/res",
-      "dist/main.android.jsbundle"
-    ],
-    "ios": [
-      "dist/assets",
-      "dist/main.ios.jsbundle"
-    ],
-    "macos": [
-      "dist/assets",
-      "dist/main.macos.jsbundle"
-    ],
-    "visionos": [
-      "dist/assets",
-      "dist/main.visionos.jsbundle"
-    ],
-    "windows": [
-      "dist/assets",
-      "dist/main.windows.bundle"
-    ]
-  },
-  "android": {
-    "package": "yandexremoteconfig.example"
-  },
-  "ios": {
-    "bundleIdentifier": "yandexremoteconfig.example"
-  }
+  "name": "ReactNativeYandexRemoteConfigExample",
+  "displayName": "ReactNativeYandexRemoteConfigExample"
 }
