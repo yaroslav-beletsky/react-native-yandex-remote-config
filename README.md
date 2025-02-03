@@ -1,4 +1,4 @@
-# Yandex Remote Config for React Native
+# 🚀 Yandex Remote Config for React Native
 
 ## 🚨 ВНИМАНИЕ! Версия 1.x.x. и выше работает только с новой архитектурой React Native TurboModules.
 
