@@ -1,6 +1,6 @@
 {
   "name": "@beletsky/react-native-yandex-remote-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Yandex Remote Config for React Native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
